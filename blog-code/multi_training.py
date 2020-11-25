@@ -27,7 +27,6 @@ def loadPieces(dirpath):
 #            continue
 
 #        pieces[name] = outMatrix
-#        print "Loaded {}".format(name)
 #        sys.stdout.flush()
 
 #    return pieces
@@ -67,8 +66,6 @@ def getPieceSegment(pieces):
       raise ValueError("Found piece which was too short...")
     else:
       start = random.randrange(0, piecelen - batch_len, division_len)
-      
-    # print "Range is {} {} {} -> {}".format(0,len(piece_output)-batch_len,division_len, start)
 
     seg_out = piece_output[start:start+batch_len]
     seg_in = noteStateMatrixToInputForm(seg_out)
@@ -94,7 +91,7 @@ def trainPiece(model,pieces,epochs, epochstarthandler=None, start=0):
           epochstarthandler(i)
         error = model.update_fun(*getPieceBatch(pieces))
         if i % 100 == 0:
-            print "{}: epoch {}, error={}".format(time.strftime("%c"), i, error)
+            print("{}: epoch {}, error={}".format(time.strftime("%c"), i, error))
             sys.stdout.flush()
         if i % 500 == 0 or (i % 100 == 0 and i < 1000):
             xIpt, xOpt = map(numpy.array, getPieceSegment(pieces))

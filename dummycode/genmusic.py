@@ -6,46 +6,46 @@ from time import sleep
 if __name__ == '__main__':
 
   if len(sys.argv) != 4:
-    print "Needs exactly three args, configfile, output file and number of seconds of music to make"
+    print("Needs exactly three args, configfile, output file and number of seconds of music to make")
     exit(1)
 
   paramfile = sys.argv[1]
   if not os.path.isfile(paramfile):
-    print "paramfile {} does not exist.".format(paramfile)
+    print("paramfile {} does not exist.".format(paramfile))
     exit(1)
 
   outfile = sys.argv[2]
 
   numseconds = int(sys.argv[3])
 
-  print "{}: Loading model from file {}".format(time.strftime("%c"), paramfile)
+  print("{}: Loading model from file {}".format(time.strftime("%c"), paramfile))
   sys.stdout.flush()
   sleep(4)
 
   slices_to_generate = 8 * numseconds
 
-  print "{}: Generating music to output/generated...".format(time.strftime("%c"))
-  print "PERCENT: 20"
+  print("{}: Generating music to output/generated...".format(time.strftime("%c")))
+  print("PERCENT: 20")
   sys.stdout.flush()
   sleep(1)
-  print "Still generating music..."
-  print "PERCENT: 40"
+  print("Still generating music...")
+  print("PERCENT: 40")
   sys.stdout.flush()
   sleep(1)
-  print "Still generating music... (2)"
-  print "PERCENT: 50"
+  print("Still generating music... (2)")
+  print("PERCENT: 50")
   sys.stdout.flush()
   sleep(1)
-  print "Still generating music... (3)"
-  print "PERCENT: 60"
+  print("Still generating music... (3)")
+  print("PERCENT: 60")
   sys.stdout.flush()
   sleep(1)
-  print "Still generating music... (4)"
-  print "PERCENT: 85"
+  print("Still generating music... (4)")
+  print("PERCENT: 85")
   sys.stdout.flush()
   sleep(1)
-  print "Done generating music, writing out..."
-  print "PERCENT: 100"
+  print("Done generating music, writing out...")
+  print("PERCENT: 100")
   sys.stdout.flush()
 
 
@@ -93,14 +93,12 @@ if __name__ == '__main__':
   # Add the end of track event, append it to the track
   eot = midi.EndOfTrackEvent(tick=1)
   track.append(eot)
-  # Print out the pattern
-  #print pattern
   # Save the pattern to disk
   midi.write_midifile(outfile, pattern)
 
 
 
 
-  print "Written out!!"
+  print("Written out!!")
   sys.stdout.flush()
 

@@ -17,14 +17,14 @@ def start_process(cmd, stdouthandler, deathhandler):
 
         def block_on_output(out):
             for line in iter(out.readline, b''):
-                print line
+                print(line)
                 stdouthandler(line)
 
             processAlive = (process.poll() is None)
             if processAlive:
-              print "Got eof from stdout, but process is still alive"
+              print("Got eof from stdout, but process is still alive")
             else:
-              print "Got eof, process is dead"
+              print("Got eof, process is dead")
             deathhandler()
             out.close()
 
@@ -46,19 +46,17 @@ class Process:
   """
   def __init__(self, cmd, progressChangeHandler=None, terminationHandler=None):
 
-    print cmd
+    print(cmd)
 
     self.lines = []
     self.percentDone = 0
     self.isDead = False
 
     def handleStdout(line):
-      #print "Got line! {}".format(line)
       self.lines.append(line)
       toks = line.split()
       if len(toks) == 2 and toks[0].strip() == 'PERCENT:':
         self.percentDone = int(toks[1])
-        #print "Percent change detected!!! {}".format(self.percentDone)
         if self.percentDone > 100:
           raise ValueError("Percentage done unexpectedly greater than 100")
         if self.percentDone < 0:
@@ -67,7 +65,6 @@ class Process:
           progressChangeHandler(self.percentDone)
 
     def handleDeath():
-      #print "DEATH DETECTED!!!"
       self.isDead = True
       if terminationHandler != None:
         terminationHandler()
@@ -103,11 +100,9 @@ class Process:
 #          #at the end going backwards and bail after
 #          #the first update, but probably this is fine
 #          for line in stdout:
-#            print "Processing stdout line: {}".format(line)
 #            toks = line.split()
 #            if len(toks) == 2 and toks[0].strip() == 'PERCENT:':
 #              self.percentDone = int(toks[1])
-#              print "Percent change detected!!! {}".format(self.percentDone)
 #              if self.percentDone > 100:
 #                raise ValueError("Percentage done unexpectedly greater than 100")
 #              if self.percentDone < 0:
@@ -203,7 +198,7 @@ class Backend:
             ' '.join([self.upload_dir + xmlfile for xmlfile in files]),
             str(iterations)
         ]
-        print ' '.join(cmd)
+        print(' '.join(cmd))
 
         self.training_configs[config] = Process(cmd, progressChangeHandler, terminationHandler)
         self.__cleanup()
@@ -304,13 +299,13 @@ if __name__ == '__main__':
     SCRIPT_ROOT = BACKEND_BASE
 
     def handleProgress(pctDone):
-      print "{}%".format(pctDone)
+      print("{}%".format(pctDone))
 
     def handleTerminationTraining():
-      print "Training done!"
+      print("Training done!")
 
     def handleTerminationGeneration():
-      print "Generation done!"
+      print("Generation done!")
 
     backend = Backend(UPLOAD_DIR, CONFIG_DIR, GENERATED_SONG_DIR, SCRIPT_ROOT)
     #backend.start_training_process("config", ["Marcia_Turca.xml", "bach_bouree_eminor.xml", "Mozart_Cadenza_2.0.xml"], 3, handleProgress, handleTerminationTraining)
@@ -319,6 +314,6 @@ if __name__ == '__main__':
     #backend.start_music_generation_process('params300.p', 'myexamplesong.mid', 15, handleProgress, handleTerminationGeneration)
 
     for line in sys.stdin:
-      print line
+      print(line)
 
 

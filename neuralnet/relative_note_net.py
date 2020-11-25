@@ -106,7 +106,6 @@ def note_list_to_midi(notes, start_pitch, tickscale = 1):
     time = 0
     for note in notes:
         pitch, time, duration = note.get_absolute(pitch, time)
-        #print "Writing midi, using time {}".format(time)
         if pitch > 0 and pitch < 128:
             track.append(midi.NoteOnEvent(tick=time * tickscale, pitch=pitch,
                                           velocity=60))
@@ -207,7 +206,7 @@ def train_note_list_net(net, lists, dropout=.5, output_rate=100,
         print('\tweights saved in weights{0}'.format(i))
         
         for j in xrange(output_rate):
-            print "\t\t{}: {}".format(time.strftime("%c"), i + j)
+            print("\t\t{}: {}".format(time.strftime("%c"), i + j))
             sys.stdout.flush()
 
             for batch in batches:
@@ -236,7 +235,7 @@ def note_list_net_generate(net, length, path, start_note=60, absolute = False):
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print 'Usage: python relative_note_net.py [boolean]'
+        print('Usage: python relative_note_net.py [boolean]')
     else:
         net = MLP(40, 40, [256, 256], True)
         #lists = get_note_lists('midisamples_raw/')

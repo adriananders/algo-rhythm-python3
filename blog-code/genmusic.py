@@ -17,16 +17,16 @@ lock = threading.Lock()
 
 if __name__ == '__main__':
 
-  print "Starting execution"
+  print("Starting execution")
 
   if len(sys.argv) != 4:
-    print "Needs exactly three args, configfile, output file and number of seconds of music to make"
+    print("Needs exactly three args, configfile, output file and number of seconds of music to make")
     exit(1)
 
   #parameter file that contains results of training
   paramfile = sys.argv[1]
   if not os.path.isfile(paramfile):
-    print "paramfile {} does not exist.".format(paramfile)
+    print("paramfile {} does not exist.".format(paramfile))
     exit(1)
 
   #output file to write to
@@ -35,10 +35,10 @@ if __name__ == '__main__':
   #number of seconds of music to generate
   numseconds = int(sys.argv[3])
 
-  print "{}: Loading model from file {}".format(time.strftime("%c"), paramfile)
+  print("{}: Loading model from file {}".format(time.strftime("%c"), paramfile))
   sys.stdout.flush()
   mod = modelFromFile(paramfile)
-  print "{}: Done loading model.".format(time.strftime("%c"))
+  print("{}: Done loading model.".format(time.strftime("%c")))
 
   pitchrange = midi_to_statematrix.upperBound - midi_to_statematrix.lowerBound
   #We need to construct one slice to initialize the music generation
@@ -58,10 +58,10 @@ if __name__ == '__main__':
   xOpt = firstSlice
   xIpt = data.noteStateMatrixToInputForm(firstSlice)
 
-  print "Numseconds received: {}".format(numseconds)
+  print("Numseconds received: {}".format(numseconds))
   sys.stdout.flush()
   slices_to_generate = 8 * numseconds
-  print "{}: Generating music to output/generated...".format(time.strftime("%c"))
+  print("{}: Generating music to output/generated...".format(time.strftime("%c")))
   sys.stdout.flush()
 
   def outputPercentages():
@@ -71,25 +71,25 @@ if __name__ == '__main__':
       time.sleep(float(numseconds * 4)/100)
       percentDoneApprox += 1
       lock.acquire()
-      print "PERCENT: {}".format(percentDoneApprox)
+      print("PERCENT: {}".format(percentDoneApprox))
       sys.stdout.flush()
       lock.release()
-    print "Percent printing thread exiting"
+    print("Percent printing thread exiting")
     sys.stdout.flush()
 
   t = Thread(target = outputPercentages)
   t.start()
 
-  print "Slices to generate: {}".format(slices_to_generate)
+  print("Slices to generate: {}".format(slices_to_generate))
   sys.stdout.flush()
   outputStateMatrix = numpy.concatenate((numpy.expand_dims(xOpt[0], 0), mod.predict_fun(slices_to_generate, 1, xIpt[0])), axis=0)
   
-  print "Num slices in output matrix: {}".format(len(outputStateMatrix))
+  print("Num slices in output matrix: {}".format(len(outputStateMatrix)))
   sys.stdout.flush()
   noteStateMatrixToMidi(outputStateMatrix, outfile)
 
   lock.acquire()
-  print "{}: Done.".format(time.strftime("%c"))
+  print("{}: Done.".format(time.strftime("%c")))
   sys.stdout.flush()
   lock.release()
   os._exit(0)

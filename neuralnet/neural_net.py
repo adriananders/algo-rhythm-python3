@@ -426,7 +426,7 @@ def binary_example():
         test = mlp.run(s)[0]
         print(s)
         print(test)
-        print mlp.layers[0].outputs.get_value()
+        print(mlp.layers[0].outputs.get_value())
         print('')
     mlp.save('testsave')
     mlp2 = load_MLP('testsaveRNN')

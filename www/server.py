@@ -159,14 +159,14 @@ def start_generation(config_file, length, name):
 
     def handleProgressChange(newPercentDone):
         processHandlerLock.acquire()
-        print "Progress changed for generation process for {} to {}%".format(name, newPercentDone)
+        print("Progress changed for generation process for {} to {}%".format(name, newPercentDone))
         with app.app_context():
             broadcast_status()
         processHandlerLock.release()
 
     def handleTermination():
         processHandlerLock.acquire()
-        print "Generation process for {} terminated!!!!".format(name)
+        print("Generation process for {} terminated!!!!".format(name))
         with app.app_context():
             broadcast_status()
         processHandlerLock.release()
@@ -196,14 +196,14 @@ def start_training(files, name, iterations):
 
     def handleProgressChange(newPercentDone):
         processHandlerLock.acquire()
-        print "Progress changed for training process {} to {}%".format(name, newPercentDone)
+        print("Progress changed for training process {} to {}%".format(name, newPercentDone))
         with app.app_context():
             broadcast_status()
         processHandlerLock.release()
 
     def handleTermination():
         processHandlerLock.acquire()
-        print "Training process {} terminated!!!!".format(name)
+        print("Training process {} terminated!!!!".format(name))
         with app.app_context():
             broadcast_status()
         processHandlerLock.release()

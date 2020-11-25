@@ -31,13 +31,6 @@ def getDivisions(e):
                   retval[partName] = divs
                   if divisions_val == None:
                     divisions_val = divs
-#                  else:
-                    #let's just check to see that there is
-                    #always agreement
-                    #nvm, doesn't matter
-                    #if divisions_val != divs:
-                      #print "Divisions don't agree: {0} != {1}".format(divisions_val, divisions.text)
-#  return divisions_val
   return retval
 
 #if it's a rest, return the
@@ -53,11 +46,11 @@ def getRestLength(note):
         duration = int(el.text)        
       else:
         #found duration tag twice
-        print "Duration tag found twice for note..."
+        print("Duration tag found twice for note...")
   if isRest:
     if duration == None:
       #problem...
-      print "Rest with no duration found"
+      print("Rest with no duration found")
     else:
       return duration
   else:
@@ -73,7 +66,7 @@ def getBackupLength(backup):
         duration = int(el.text)        
       else:
         #found duration tag twice
-        print "Duration tag found twice for note..."
+        print("Duration tag found twice for note...")
   return duration
 
 def xmlPitchToMidiPitch(letter, octave, alter):
@@ -87,7 +80,7 @@ def xmlPitchToMidiPitch(letter, octave, alter):
     "B" : 11,
   }
   if not letter in table.keys():
-    print "Letter {0} is not a valid letter A-G".format(letter)
+    print("Letter {0} is not a valid letter A-G".format(letter))
   return 12 + table[letter] + 12 * octave + alter
 
 
@@ -108,7 +101,7 @@ def getNoteInfo(note, measureNum):
         duration = int(el.text)
       else:
         #found duration tag twice
-        print "Duration tag found twice for note..."
+        print("Duration tag found twice for note...")
     elif el.tag == 'chord':
       isChord = True
     elif el.tag == 'tie':
@@ -120,19 +113,19 @@ def getNoteInfo(note, measureNum):
             step = pitchel.text
           else:
             #found step tag twice
-            print "step tag found twice for note..."
+            print("step tag found twice for note...")
         if pitchel.tag == 'octave':
           if octave == None:
             octave = int(pitchel.text)
           else:
             #found octave tag twice
-            print "octave tag found twice for note..."
+            print("octave tag found twice for note...")
         if pitchel.tag == 'alter':
           if alter == None:
             alter = int(pitchel.text)
           else:
             #found alter tag twice
-            print "alter tag found twice for note..."
+            print("alter tag found twice for note...")
   if isRest:
     #if it's a rest, then return None
     return None
@@ -141,9 +134,9 @@ def getNoteInfo(note, measureNum):
       #this can happen for grace notes so actually just return none
       return None
     elif step == None:
-      print "Note with no step found"
+      print("Note with no step found")
     elif octave == None:
-      print "Note with no octave found"
+      print("Note with no octave found")
     if alter == None:
       alter = 0
     midiPitch = xmlPitchToMidiPitch(step, octave, alter)
@@ -182,10 +175,8 @@ def iterateThroughMusic(e, handleNote, handleMeasure = None, handleRest = None, 
                   continue
                 midiPitch, duration, isChord, tieType = res
                 #allNotes[timePos, (midiPitch, duration)]
-                #print "Found note, pitch: {0}, duration: {1}".format(midiPitch, duration)
                 if timePos % resolution == 0:
                   if isChord:
-                    #print "isChord, lastTime: {0}, currTime: {1}".format(lastNoteTimePos, timePos)
                     timePosForNote = lastNoteTimePos
                   else:
                     timePosForNote = timePos
@@ -375,18 +366,12 @@ def parseXMLToSomething(xmltree, noteCreationCallback):
   divisionsPerBeat = divisionsLCM
 
   #this will be an exact floating point number
-  #print "secondsPerSlice: {}".format(secondsPerSlice)
-  #print "beatsPerSecond: {}".format(beatsPerSecond)
   slicesPerBeat = 1 / (beatsPerSecond * secondsPerSlice)
 
   #we require that the number of slices for a beat be an integer which
   #is a power of two.  To do this, we'll take the log base 2, round
   #to the nearest int, then compute inverse log
-  #print "SlicesPerBeat (real): {}".format(slicesPerBeat)
   slicesPerBeat = int(2**(int(round(math.log(slicesPerBeat, 2)))))
-
-  #print "SlicesPerBeat: {}".format(slicesPerBeat)
-  #print "divisionsPerBeat: {}".format(divisionsPerBeat)
 
   #compute gcd of slices per beat and divisions per beat
   slicesDivisionsGcd = fractions.gcd(slicesPerBeat, divisionsPerBeat)
@@ -399,12 +384,8 @@ def parseXMLToSomething(xmltree, noteCreationCallback):
   #that will be needed for neural net training
   pickupSlices = pickupDivisions * slicesPerBeat / divisionsPerBeat
 
-  #print "Pickup Divs: {}".format(pickupDivisions)
-  #print "Pickup Slices: {}".format(pickupSlices)
-
   def handleNote_createStateMatrix(time, pitch, duration, part):
     #if part == 'P2':
-    #print "Got note, pitch: {0}, duration: {1}, time: {2}".format(pitch, duration, time)
     pitch
     if part in transpositions.keys():
       pitch += transpositions[part]
@@ -413,7 +394,6 @@ def parseXMLToSomething(xmltree, noteCreationCallback):
     #numbers of divisions, scale so that the time/
     #duration is in terms of the LCM divisions
     if divisions[part] != divisionsLCM:
-      #print "LCM scaling happening"
       scalingFactor = (divisionsLCM / divisions[part])
       time *= scalingFactor
       duration *= scalingFactor
@@ -424,9 +404,7 @@ def parseXMLToSomething(xmltree, noteCreationCallback):
       return
     else:
       time = time * slicesPerBeat / divisionsPerBeat
-      #print "duration before: {}".format(duration)
       duration = duration * slicesPerBeat / divisionsPerBeat
-      #print "duration after: {}".format(duration)
       if duration == 0:
         duration = 1
 
@@ -459,12 +437,9 @@ def stateMatrixForSong(tree):
     #that the desired times exists
     #last time needed is time + duration - 1,
     #len <= last time needed, so...
-    #print "Note at time {0}, pitch: {1}".format(time, pitch)
     while len(stateMatrix) < time + duration:
       row = numPitches * [[0, 0]]
       stateMatrix.append(row)
-    #print "time: {}".format(time)
-    #print "size: {}".format(len(stateMatrix))
     stateMatrix[time][pitch] = [1, 1]
     for i in range(time + 1, time + duration):
       if stateMatrix[i][pitch] == [0, 0]:
@@ -483,15 +458,15 @@ def createStateMatrices(basedir = 'musicxml', minslices = 0):
     if not theFile.split('.')[-1] == 'xml':
       continue
         #parse xml file into document tree
-    print basedir + '/' + theFile
+    print(basedir + '/' + theFile)
     tree = xml.etree.ElementTree.parse(basedir + '/' + theFile).getroot()
     if getTempoForSong(tree) == None:
-      print "File {} has no tempo!!!".format(theFile)
+      print("File {} has no tempo!!!".format(theFile))
     else:
       sm = stateMatrixForSong(tree)
       songMatrix = sm[1]
       if len(songMatrix) < minslices:
-        print "File {} omitted, it is too short.".format(theFile)
+        print("File {} omitted, it is too short.".format(theFile))
       else:
         stateMatrices[theFile] = sm
 
@@ -563,7 +538,7 @@ def createStateMatrices_old():
       continue
     origFilename = toks[1]
     mxlfile = basedir + origFilename
-    print mxlfile
+    print(mxlfile)
 
     transpositions = {}
     slow = None
@@ -593,7 +568,7 @@ def createStateMatrices_old():
     #parse xml file into document tree
     tree = xml.etree.ElementTree.parse(mxlfile).getroot()
     if getTempoForSong(tree) == None:
-      print "File {} has no tempo!!!".format(mxlfile)
+      print("File {} has no tempo!!!".format(mxlfile))
     else:
       stateMatrices[origFilename] = stateMatrixForSong(tree)
 
@@ -601,8 +576,7 @@ def createStateMatrices_old():
 
 if __name__ == "__main__":
   stateMatrices = createStateMatrices()
-  print "{0} songs total.".format(len(stateMatrices))
-  #print "Pwd: " + os.getcwd()
+  print("{0} songs total.".format(len(stateMatrices)))
   for k in stateMatrices.keys():
     midi_to_statematrix.noteStateMatrixToMidi(stateMatrices[k][1], name='./midi_output_test/{}'.format(k))
     

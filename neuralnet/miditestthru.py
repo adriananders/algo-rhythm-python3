@@ -6,7 +6,7 @@ import midi
 
 if __name__ == '__main__':
   if len(sys.argv) != 3:
-    print 'Requires midi files as args, src then dest'
+    print('Requires midi files as args, src then dest')
     exit(1)
 
   filename = sys.argv[1]
