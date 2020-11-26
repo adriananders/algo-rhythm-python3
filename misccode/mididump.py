@@ -2,7 +2,7 @@
 """
 Print a description of a MIDI file.
 """
-import midi
+import python3_midi as midi
 import sys
 
 if len(sys.argv) != 2:

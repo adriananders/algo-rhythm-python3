@@ -1,5 +1,8 @@
 from neural_net import *
-import midi, os, sys, time
+import python3_midi as midi
+import os
+import sys
+import time
 import readxml
 
 

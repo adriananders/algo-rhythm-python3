@@ -1,7 +1,6 @@
 import sys
 import relative_note_net
-import midi
-
+import python3_midi as midi
 
 
 if __name__ == '__main__':

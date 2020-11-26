@@ -1,5 +1,8 @@
-import sys, random, time, os
-import midi
+import sys
+import random
+import time
+import os
+import python3_midi as midi
 from time import sleep
 
 

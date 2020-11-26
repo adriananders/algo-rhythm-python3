@@ -1,4 +1,5 @@
-import midi, numpy
+import python3_midi as midi
+import numpy
 
 lowerBound = 24
 upperBound = 102
