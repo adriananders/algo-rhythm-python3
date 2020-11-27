@@ -454,6 +454,9 @@ def createStateMatrices(basedir = 'musicxml', minslices = 0):
 
   stateMatrices = {}
 
+  if not os.path.exists(basedir):
+    os.makedirs(basedir)
+
   for theFile in os.listdir(os.getcwd() + '/' + basedir):
     if not theFile.split('.')[-1] == 'xml':
       continue

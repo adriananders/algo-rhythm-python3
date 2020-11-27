@@ -201,14 +201,14 @@ def train_note_list_net(net, lists, dropout=.5, output_rate=100,
             os.makedirs(path)
 
     print('\nTraining network:')
-    for i in xrange(0, total_epochs, output_rate):
+    for i in range(0, total_epochs, output_rate):
         note_list_net_generate(net, output_length, path + '{0}.mid'.format(i),
                                absolute = absolute)
         print('\tfile example{0}.mid created'.format(i))
         net.save(path + 'weights{0}'.format(i))
         print('\tweights saved in weights{0}'.format(i))
         
-        for j in xrange(output_rate):
+        for j in range(output_rate):
             print("\t\t{}: {}".format(time.strftime("%c"), i + j))
             sys.stdout.flush()
 
@@ -225,7 +225,7 @@ def note_list_net_generate(net, length, path, start_note=60, absolute = False):
     net.reset()
     last = [RelativeNote().get_binary()]
     notes = []
-    for i in xrange(length):
+    for i in range(length):
         note = net.run(last)
         if absolute:
             notes.append(AbsoluteNote(map(lambda x: int(round(x)), note[0])))

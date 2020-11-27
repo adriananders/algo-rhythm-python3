@@ -1,3 +1,4 @@
+from functools import reduce
 import theano, numpy, os
 import theano.tensor as tensor
 import readxml, midi_to_statematrix
@@ -286,7 +287,7 @@ class MLP:
         sub = theano.function([a, b], c)
         if show_status:
             print("Training MLP on sample data with {0} epochs:".format(epochs))
-        for i in xrange(epochs):
+        for i in range(epochs):
             if show_status:
                 print("\tEpoch {0} of {1}".format(i, epochs))
             for x, t in data:
@@ -351,7 +352,7 @@ def train_statematrix_net(net, batch_size=128, dropout=.5, output_rate = 100,
         matrix = song[1]
         while len(matrix) > 0:
             batch = []
-            for i in xrange(batch_size):
+            for i in range(batch_size):
                 if len(matrix) == 0:
                     break
                 batch.append([[n * 20 - 19 for l in matrix.pop() for n in l]])
@@ -361,10 +362,10 @@ def train_statematrix_net(net, batch_size=128, dropout=.5, output_rate = 100,
             os.makedirs(path)
 
     print('\nTraining network:')
-    for i in xrange(0, total_epochs, output_rate):
+    for i in range(0, total_epochs, output_rate):
         last = [[-1] * 156]
         statematrix = []
-        for j in xrange(output_length):
+        for j in range(output_length):
             new = net.run(last)
             statematrix.append(estimate_statematrix_from_output(new[0], last[0]))
             last = new
@@ -374,7 +375,7 @@ def train_statematrix_net(net, batch_size=128, dropout=.5, output_rate = 100,
         net.save(path + 'weights{0}'.format(i))
         print('\tweights saved in weights{0}'.format(i))
         
-        for j in xrange(output_rate):
+        for j in range(output_rate):
             print('\t\t' + str(i + j))
             for batch in batches:
                 net.train(batch, 1, .1, dropout, .5)
@@ -436,6 +437,6 @@ def binary_example():
 if __name__ == '__main__':
     net = MLP(156, 156, [256, 256], True)
     train_statematrix_net(net)
-    mlp.save('trained_statematrix_net')
+    net.save('trained_statematrix_net')
 
 

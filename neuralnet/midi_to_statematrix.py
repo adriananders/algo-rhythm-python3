@@ -34,7 +34,6 @@ def midiToNoteStateMatrix(midifile):
                 if isinstance(evt, midi.NoteEvent):
                     if (evt.pitch < lowerBound) or (evt.pitch >= upperBound):
                         pass
-                        # print "Note {} at time {} out of bounds (ignoring)".format(evt.pitch, time)
                     else:
                         if isinstance(evt, midi.NoteOffEvent) or evt.velocity == 0:
                             state[evt.pitch-lowerBound] = [0, 0]
@@ -43,7 +42,7 @@ def midiToNoteStateMatrix(midifile):
                 elif isinstance(evt, midi.TimeSignatureEvent):
                     if evt.numerator not in (2, 4):
                         # We don't want to worry about non-4 time signatures. Bail early!
-                        print "Found time signature event {} from file {}. Bailing!".format(evt, midifile)
+                        print("Found time signature event {} from file {}. Bailing!".format(evt, midifile))
                         return statematrix
 
                 try:
@@ -104,14 +103,13 @@ def noteStateMatrixToMidi(statematrix, name="example"):
 if __name__ == "__main__":
   midifile = "BWV772.MID"
   mat = midiToNoteStateMatrix(midifile)
-# print repr(mat)
   for col in mat:
-    print "Next time step"
+    print("Next time step")
     for i in range(upperBound - lowerBound):
       el = col[i]
       pitch = lowerBound + i
       if not (el[0] == 0 and el[1] == 0):
-        print "{0} : {1}, {2}".format(pitch, el[0], el[1])
+        print("{0} : {1}, {2}".format(pitch, el[0], el[1]))
   noteStateMatrixToMidi(mat)
 
 
