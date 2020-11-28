@@ -11,6 +11,7 @@ blog-code/trained_configs/
 blog-code/generated_music/
 www/static/generated_music/
 venv/
+neuralnet/trained_statematrix_netRNN/
 
 .DS_Store
 .idea
