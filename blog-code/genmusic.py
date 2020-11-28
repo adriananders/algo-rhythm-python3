@@ -1,4 +1,4 @@
-import cPickle as pickle
+import pickle
 from midi_to_statematrix import *
 import model, multi_training, midi_to_statematrix
 import sys, random, data, time, os

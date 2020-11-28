@@ -1,7 +1,7 @@
 import os, random, sys
 from midi_to_statematrix import *
 from data import *
-import cPickle as pickle
+import pickle
 import readxml
 
 import signal

@@ -10,6 +10,7 @@ dummycode/generated_music/
 blog-code/trained_configs/
 blog-code/generated_music/
 www/static/generated_music/
+venv/
 
 .DS_Store
 .idea

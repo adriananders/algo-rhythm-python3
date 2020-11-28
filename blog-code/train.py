@@ -1,4 +1,4 @@
-import cPickle as pickle
+import pickle
 import gzip
 import numpy
 from midi_to_statematrix import *
